@@ -5,9 +5,8 @@ from json import loads
 
 class Loot:
     def __init__(self):
-        self._csgo_api1 = 'https://bymykel.github.io/CSGO-API/api/en/'  # Full JSON list API
-        self._csgo_api2 = 'https://cs2-api.vercel.app/api/'             # Query JSON API
-        self.id = "crate-4001"                                          # temporarily hardcoded to 'CS:GO Weapon Case'
+        self._cs2_api = 'https://bymykel.github.io/CSGO-API/api/en/'  # Full JSON list API
+        self.id = "crate-4001"                                        # temporarily hardcoded to 'CS:GO Weapon Case'
         self.loot = ""
         self.rarity = ""
         self.name = ""
@@ -16,7 +15,7 @@ class Loot:
         self.wear = ['Factory New', 'Minimal Wear', 'Field-Tested', 'Well-Worn', 'Battle-Scarred']
     
     def uncrate(self):
-        cases = get(urljoin(self._csgo_api1, "crates.json")).text
+        cases = get(urljoin(self._cs2_api, "crates.json")).text
         case = [c for c in loads(cases) if c["id"] == self.id]
         # Based on published odds: https://www.csgo.com.cn/news/gamebroad/20170911/206155.shtml
         rng = randint(1,782)
@@ -27,21 +26,21 @@ class Loot:
         # Covert (Red)
         elif(rng <= 7):
             self.rarity = "Covert"
-            self.loot = choice([x for x in case[0]["contains"] if x['rarity'] == "Covert"])
+            self.loot = choice([x for x in case[0]["contains"] if x['rarity']['name'] == "Covert"])
         # Classified (Pink)
         elif(rng <= 32):
             self.rarity = "Classified"
-            self.loot = choice([x for x in case[0]["contains"] if x['rarity'] == "Classified"])
+            self.loot = choice([x for x in case[0]["contains"] if x['rarity']['name'] == "Classified"])
         # Restricted (Purple)
         elif(rng <= 157):
             self.rarity = "Restricted"
-            self.loot = choice([x for x in case[0]["contains"] if x['rarity'] == "Restricted"])
+            self.loot = choice([x for x in case[0]["contains"] if x['rarity']['name'] == "Restricted"])
         # Mil-Spec (Blue)
         else:
             self.rarity = "Mil-Spec Grade"
-            self.loot = choice([x for x in case[0]["contains"] if x['rarity'] == "Mil-Spec Grade"])
+            self.loot = choice([x for x in case[0]["contains"] if x['rarity']['name'] == "Mil-Spec Grade"])
         self.name = self.loot["name"]
-        self.img = loads(get(urljoin(self._csgo_api2, f"items?id={self.loot['id']}")).text)["image"]
+        self.img = self.loot["image"]
 
         # Determine StatTrak™
         rng = randint(1,10)

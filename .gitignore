@@ -1,4 +1,6 @@
 .vscode
 .env
-venv
+.venv
 gamblino/__pycache__
+gamblino.txt
+http_cache.sqlite
