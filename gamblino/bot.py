@@ -30,52 +30,32 @@ async def on_ready():
 	except Exception as e:
 		print(e)
 
-@bot.tree.command(name="open", description="Open a CS2 crate, random if not specified")
+@bot.tree.command(name="open", description="Open a random crate from Counter-Strike 2")
 async def open(interaction: discord.Interaction):
 	loot = Loot().uncrate()
 	img = discord.Embed()
 	img.set_image(url=loot.img)
 	stattrak_str = lambda : "StatTrak™ " if loot.stattrak else ""
+	color = ""
+	stattrak_color = "\u001b[0;33m"
 	match(loot.rarity):
 		# Use ansi formatting to use color text in Discord
 		case "Rare":
-			await interaction.response.send_message(
-				f"{interaction.user.mention}\n"
-				f"You have opened:\n"
-				f"```ansi\n"
-				f"\u001b[0;31m{loot.wear} \u001b[0;33m{stattrak_str()}\u001b[0;31m{loot.name}\n"
-				f"```",
-				embed=img)
+			color = "\u001b[0;31m]"
 		case "Covert":
-			await interaction.response.send_message(
-				f"{interaction.user.mention}\n"
-				f"You have opened:\n"
-				f"```ansi\n"
-				f"\u001b[0;31m{loot.wear} \u001b[0;33m{stattrak_str()}\u001b[0;31m{loot.name}\n"
-				f"```",
-				embed=img)
+			color = "\u001b[0;31m"
 		case "Classified":
-			await interaction.response.send_message(
-				f"{interaction.user.mention}\n"
-				f"You have opened:\n"
-				f"```ansi\n"
-				f"\u001b[0;35m{loot.wear} \u001b[0;33m{stattrak_str()}\u001b[0;35m{loot.name}\n"
-				f"```",
-				embed=img)
+			color = "\u001b[0;35m"
 		case "Restricted":
-			await interaction.response.send_message(
-				f"{interaction.user.mention}\n"
-				f"You have opened:\n"
-				f"```ansi\n"
-				f"\u001b[0;35;47m{loot.wear}\u001b[0;35;47m \u001b[0;33;47m{stattrak_str()}\u001b[0;35;47m{loot.name}\n"
-				f"```",
-				embed=img)
+			color = "\u001b[0;35;47m"
+			stattrak_color = "\u001b[0;33;47m"
 		case "Mil-Spec Grade":
-			await interaction.response.send_message(
+			color = "\u001b[0;34m"
+	await interaction.response.send_message(
 				f"{interaction.user.mention}\n"
-				f"You have opened:\n"
+				f"You have opened from {loot.case_name}:\n"
 				f"```ansi\n"
-				f"\u001b[0;34m{loot.wear} \u001b[0;33m{stattrak_str()}\u001b[0;34m{loot.name}\n"
+				f"{color}{loot.wear}{stattrak_color} {stattrak_str()}{color}{loot.name}\n"
 				f"```",
 				embed=img)
 

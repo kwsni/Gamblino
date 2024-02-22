@@ -6,7 +6,8 @@ from json import loads
 class Loot:
     def __init__(self):
         self._cs2_api = 'https://bymykel.github.io/CSGO-API/api/en/'  # Full JSON list API
-        self.id = "crate-4001"                                        # temporarily hardcoded to 'CS:GO Weapon Case'
+        self.crate_id = ""
+        self.crate_name = ""
         self.loot = ""
         self.rarity = ""
         self.name = ""
@@ -16,7 +17,8 @@ class Loot:
     
     def uncrate(self):
         cases = get(urljoin(self._cs2_api, "crates.json")).text
-        case = [c for c in loads(cases) if c["id"] == self.id]
+        case = choice([c for c in loads(cases) if c["type"] == "Case"])
+        self.case_name = case["name"]
         # Based on published odds: https://www.csgo.com.cn/news/gamebroad/20170911/206155.shtml
         rng = randint(1,782)
         # Rare (Gold)
@@ -26,19 +28,19 @@ class Loot:
         # Covert (Red)
         elif(rng <= 7):
             self.rarity = "Covert"
-            self.loot = choice([x for x in case[0]["contains"] if x['rarity']['name'] == "Covert"])
+            self.loot = choice([x for x in case["contains"] if x['rarity']['name'] == "Covert"])
         # Classified (Pink)
         elif(rng <= 32):
             self.rarity = "Classified"
-            self.loot = choice([x for x in case[0]["contains"] if x['rarity']['name'] == "Classified"])
+            self.loot = choice([x for x in case["contains"] if x['rarity']['name'] == "Classified"])
         # Restricted (Purple)
         elif(rng <= 157):
             self.rarity = "Restricted"
-            self.loot = choice([x for x in case[0]["contains"] if x['rarity']['name'] == "Restricted"])
+            self.loot = choice([x for x in case["contains"] if x['rarity']['name'] == "Restricted"])
         # Mil-Spec (Blue)
         else:
             self.rarity = "Mil-Spec Grade"
-            self.loot = choice([x for x in case[0]["contains"] if x['rarity']['name'] == "Mil-Spec Grade"])
+            self.loot = choice([x for x in case["contains"] if x['rarity']['name'] == "Mil-Spec Grade"])
         self.name = self.loot["name"]
         self.img = self.loot["image"]
 
