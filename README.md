@@ -3,4 +3,4 @@
 CS:GO/CS2 crate opening simulator as a Discord Bot
 
 ## Commands
-/open - Open a crate
+/open - Open a random case
