@@ -6,9 +6,9 @@ LABEL org.opencontainers.image.licenses=MIT
 
 WORKDIR /usr/src/gamblino-bot/
 
-COPY gamblino/*.py ./
-COPY requirements.txt ./
+COPY gamblino/*.py ./gamblino/
+COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD [ "python", "./gamblino/bot.py"]
+CMD [ "python", "gamblino/bot.py"]
