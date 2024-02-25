@@ -2,5 +2,5 @@
 .env
 .venv
 gamblino/__pycache__
-gamblino.txt
-http_cache.sqlite
+*.log
+aiohttp-cache.sqlite

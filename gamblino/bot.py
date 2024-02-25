@@ -5,34 +5,55 @@ CS:GO/CS2 crate opening simulator as a Discord Bot
 
 """
 
-import os
+import logging, logging.handlers, discord
+from os import getenv
 from dotenv import load_dotenv
-from logging import handlers
-from requests_cache import install_cache
-import discord
 from discord.ext import commands
 from loot import Loot
 
 load_dotenv()
-install_cache(expire_after=540, allowable_methods=('GET'), stale_if_error=True)
 
-token = str(os.getenv("DISCORD_TOKEN"))
-handler = handlers.RotatingFileHandler(filename='gamblino.txt', mode='a', encoding='utf-8')
-intents = discord.Intents.default()
-intents.message_content = True
-bot = commands.Bot(command_prefix='!', intents=intents)
+root_log = logging.getLogger()
+root_log.setLevel(logging.INFO)
 
-@bot.event
-async def on_ready():
-	try:
-		sync = await bot.tree.sync()
-		print(f"Successfully synced {len(sync)} commands")
-	except Exception as e:
-		print(e)
+log = logging.getLogger('gamblino-bot')
+
+rotating_handler = logging.handlers.RotatingFileHandler(
+	filename='gamblino.log', 
+	mode='a', 
+	encoding='utf-8', 
+	maxBytes=10 * 1024 * 1024, 
+	backupCount=5)
+
+dt_fmt = '%Y-%m-%d %H:%M:%S'
+formatter = logging.Formatter('[{asctime}] [{levelname:<8}] {name}: {message}', dt_fmt, style='{')
+
+rotating_handler.setFormatter(formatter)
+
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(discord.utils._ColourFormatter())
+
+root_log.addHandler(rotating_handler)
+root_log.addHandler(stream_handler)
+
+class GamblinoBot(commands.Bot):
+	def __init__(self):
+		intents = discord.Intents.default()
+		super().__init__(command_prefix='!', intents=intents)
+
+	async def on_ready(self):
+		try:
+			sync = await super().tree.sync()
+			log.info(f"Successfully synced {len(sync)} commands")
+		except Exception as e:
+			log.error(e)
+
+bot = GamblinoBot()
 
 @bot.tree.command(name="open", description="Open a random crate from Counter-Strike 2")
 async def open(interaction: discord.Interaction):
-	loot = Loot().uncrate()
+	log.info(f"Opening crate for {interaction.user.name} id:{interaction.user.id}")
+	loot = await Loot().uncrate()
 	img = discord.Embed()
 	img.set_image(url=loot.img)
 	stattrak_str = lambda : "StatTrak™ " if loot.stattrak else ""
@@ -51,12 +72,14 @@ async def open(interaction: discord.Interaction):
 			stattrak_color = "\u001b[0;33;47m"
 		case "Mil-Spec Grade":
 			color = "\u001b[0;34m"
+	log.info(f"Opened {loot} from {loot.crate_name}")
 	await interaction.response.send_message(
 				f"{interaction.user.mention}\n"
-				f"You have opened from {loot.case_name}:\n"
+				f"You have opened from {loot.crate_name}:\n"
 				f"```ansi\n"
 				f"{color}{loot.wear}{stattrak_color} {stattrak_str()}{color}{loot.name}\n"
 				f"```",
 				embed=img)
 
-bot.run(token, log_handler=handler)
+token = str(getenv("DISCORD_TOKEN"))
+bot.run(token, log_handler=None)

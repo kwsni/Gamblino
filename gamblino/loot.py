@@ -1,7 +1,10 @@
+import logging
 from random import randint, choice
-from requests import get
+from aiohttp_client_cache.session import CachedSession
+from aiohttp_client_cache import SQLiteBackend
 from urllib.parse import urljoin
-from json import loads
+
+log = logging.getLogger(__name__)
 
 class Loot:
     def __init__(self):
@@ -14,11 +17,15 @@ class Loot:
         self.img = ""
         self.stattrak = False
         self.wear = ['Factory New', 'Minimal Wear', 'Field-Tested', 'Well-Worn', 'Battle-Scarred']
+        
     
-    def uncrate(self):
-        cases = get(urljoin(self._cs2_api, "crates.json")).text
-        case = choice([c for c in loads(cases) if c["type"] == "Case"])
-        self.case_name = case["name"]
+    async def uncrate(self):
+        cases = []
+        async with CachedSession(cache=SQLiteBackend(expire_after=60*60)) as session:
+            async with session.get(urljoin(self._cs2_api, "crates.json")) as r:
+                cases = await r.json()
+        case = choice([c for c in cases if c["type"] == "Case"])
+        self.crate_name = case["name"]
         # Based on published odds: https://www.csgo.com.cn/news/gamebroad/20170911/206155.shtml
         rng = randint(1,782)
         # Rare (Gold)
