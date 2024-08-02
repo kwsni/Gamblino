@@ -31,7 +31,7 @@ class Loot:
         # Rare (Gold)
         if(rng <= 2):
             self.rarity = "Rare"
-            self.loot = choice(case[0]["contains_rare"])
+            self.loot = choice(case["contains_rare"])
         # Covert (Red)
         elif(rng <= 7):
             self.rarity = "Covert"
