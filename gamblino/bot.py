@@ -9,7 +9,7 @@ import asyncio, logging, logging.handlers, discord
 from os import getenv
 from dotenv import load_dotenv
 from discord.ext import commands
-from cogs.open import Open
+from gamblino.cogs.open import Open
 
 load_dotenv()
 
