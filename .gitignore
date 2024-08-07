@@ -1,6 +1,6 @@
 .vscode
 .env
 .venv
-gamblino/__pycache__
+**/__pycache__
 *.log
 aiohttp-cache.sqlite
