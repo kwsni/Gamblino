@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8" />
+        <title>{{ user.name }}'s Inventory</title>
+    </head>
+    <body>
+        <h1>{{ user.name }}'s inventory</h1>
+        {% if inventory %}
+            <ul>
+            {% for item in inventory %}
+                <li>{{ item.name }}: ${{ item.price }}</li>
+            {%endfor%}
+            </ul>
+        {% else %}
+            <p>Empty inventory</p>
+        {% endif %}
+    </body>
+</html>

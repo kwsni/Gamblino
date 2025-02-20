@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8" />
+        <title>{{ user.name }}'s Profile</title>
+    </head>
+    <body>
+        <h1>{{ user.name }}</h1>
+        <p>Cash: ${{ user.cash }}</p>
+        <a href="{% url 'user:inventory' user.id %}">Inventory</a>
+    </body>
+</html>
