@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-6lpz(7$_=9t%2dvts2+4s)d*a3d#odo*&+q4w6dkherc^kzu%d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.0.154']
 
 
 # Application definition
@@ -59,7 +59,7 @@ ROOT_URLCONF = 'gamblino.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

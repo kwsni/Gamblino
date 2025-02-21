@@ -1,19 +1,15 @@
-<!doctype html>
-<html lang="en-US">
-    <head>
-        <meta charset="utf-8" />
-        <title>{{ user.name }}'s Inventory</title>
-    </head>
-    <body>
-        <h1>{{ user.name }}'s inventory</h1>
-        {% if inventory %}
-            <ul>
-            {% for item in inventory %}
-                <li>{{ item.name }}: ${{ item.price }}</li>
-            {%endfor%}
-            </ul>
-        {% else %}
-            <p>Empty inventory</p>
-        {% endif %}
-    </body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<div class="bg-gray-800 p-2 rounded-lg">
+    <h1 class="font-bold p-1">{{ user.name }}'s inventory</h1>
+    {% if inventory %}
+        <ul>
+        {% for item in inventory %}
+            <li class="bg-gray-700 p-1 m-1 rounded-lg">{{ item.name }}: ${{ item.price }}</li>
+        {%endfor%}
+        </ul>
+    {% else %}
+        <p>Empty inventory</p>
+    {% endif %}
+</div>
+{% endblock content %}
