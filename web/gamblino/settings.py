@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-6lpz(7$_=9t%2dvts2+4s)d*a3d#odo*&+q4w6dkherc^kzu%d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.154']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.154']
 
 
 # Application definition
@@ -40,8 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.discord',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'gamblino.urls'
@@ -128,3 +136,29 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+LOGIN_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'discord': {
+        'APPS': [
+            {
+                'client_id': getenv('APP_ID'),
+                'secret': getenv('CLIENT_SECRET'),
+                'key': getenv('PUBLIC_KEY'),
+            },
+        ],
+        'SCOPE': [
+            'email',
+            'identify',
+        ],
+    }
+}
