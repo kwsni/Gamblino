@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="bg-gray-800 p-2 rounded-lg">
-    <h1 class="font-bold p-1">{{ user.name }}'s inventory</h1>
+    <h1 class="font-bold p-1">{{ user.username }}'s inventory</h1>
     {% if inventory %}
         <ul>
-        {% for item in inventory %}
-            <li class="bg-gray-700 p-1 m-1 rounded-lg">{{ item.name }}: ${{ item.price }}</li>
+        {% for i in inventory %}
+            <li class="bg-gray-700 p-1 m-1 rounded-lg">{{ i.item.wear }} {{ i.item.name }}: ${{ i.item.price }}</li>
         {%endfor%}
         </ul>
     {% else %}

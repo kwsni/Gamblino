@@ -4,7 +4,12 @@
     <h1 class="font-bold p-1">Users</h1>
     <ul class="bg-gray-800 p-1 rounded-lg">
     {% for user in user_list %}
-        <li class="bg-gray-700 p-1 m-1 rounded-lg"><a class="text-emerald-500 hover:text-emerald-700" href="{% url 'user:profile' user.id %}">{{ user.name }}</a></li>
+        <li class="bg-gray-700 p-1 m-1 rounded-lg">
+            <a class="text-emerald-500 hover:text-emerald-700"
+                href="{% url 'user:profile' user.id %}">
+                {{ user.username }}
+            </a>
+        </li>
     {% endfor %}
     </ul>
 {% else %}

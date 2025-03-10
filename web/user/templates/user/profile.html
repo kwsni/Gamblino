@@ -1,0 +1,13 @@
+{% extends 'base.html'%}
+{% block content %}
+<div class="bg-gray-800 p-2 rounded-lg">
+    <h1>{{ object.username }}</h1>
+    <div class="m-3">
+        <p>Cash: ${{ object.cash }}</p>
+        <a class="text-emerald-500 hover:text-emerald-700"
+            href="{% url 'user:inventory' object.id %}">
+            Inventory
+        </a>
+    </div>
+</div>
+{% endblock content %}

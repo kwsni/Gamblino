@@ -7,15 +7,22 @@
         <title>{% block title %}Gamblino{% endblock %}</title>
 
         {% load static %}
-        <link rel="stylesheet" href="{% static 'user/style.css' %}">
+        <link rel="stylesheet" href="{% static 'style.css' %}">
     </head>
     <body class="bg-gray-950 font-sans text-white">
-        <nav class="bg-gray-900">
-            {% block navbar %}
-            <h1 class="p-3 text-left font-black">
-                Gamblino
-            </h1>
-            {% endblock %}
+        <nav class="bg-gray-900 flex flex-rox w-full justify-between">
+            <a href={% url "index" %}
+            class="p-3 text-left font-black">
+                <h1>
+                    Gamblino
+                </h1>
+            </a>
+            <a href={% url "user:index" %}
+            class="p-3 text-right">
+                <span>
+                    Welcome, User
+                </span>
+            </a>
         </nav>
         <div class="m-3">
             {% block content %}{% endblock %}

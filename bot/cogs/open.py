@@ -1,7 +1,12 @@
 import discord, logging
+from os import getenv
+from dotenv import load_dotenv
 from discord.ext import commands
 from discord import app_commands
 from util.loot import Loot
+import aiohttp
+
+load_dotenv()
 
 log = logging.getLogger(__name__)
 
@@ -15,7 +20,7 @@ class Open(commands.Cog):
                 description='Open a case from CS2'
     )
     async def case(self, interaction: discord.Interaction, case_name: str) -> None:
-        log.info(f'Opening case for {interaction.user.name} id:{interaction.user.id}')
+        log.info(f'Opening case for {interaction.user.name} (id:{interaction.user.id})')
         loot = await Loot().rollCase(case_name)
         img = discord.Embed()
         img.set_image(url=loot.img)
@@ -35,14 +40,31 @@ class Open(commands.Cog):
                 stattrak_color = '\u001b[0;33;47m'
             case 'Mil-Spec Grade':
                 color = '\u001b[0;34m'
-        log.info(f'Opened {loot} from {case_name}')
-        await interaction.response.send_message(
-                    f'{interaction.user.mention}\n'
-                    f'You have opened from {case_name}:\n'
-                    f'```ansi\n'
-                    f'{color}{loot.wear}{stattrak_color} {stattrak_str()}{color}{loot.name}\n'
-                    f'```',
-                    embed=img)
+        loot_json = {'uid': interaction.user.id,
+                     'username': interaction.user.name,
+                     'item': loot.name,
+                     'wear': loot.wear,
+                     'rarity': loot.rarity}
+        
+        async with aiohttp.ClientSession(base_url='http://192.168.0.154:8000/') as session:
+            headers = {'X-API-Key': getenv('CLIENT_SECRET')}
+            async with session.post('/api/open-case', json=loot_json, headers=headers) as response:
+                api_r = await response.json()
+                
+        if api_r.code == 200:
+            log.info(f'{interaction.user.name} (id: {interaction.user.id}) has opened {loot} from {case_name}')
+            
+            await interaction.response.send_message(
+                        f'{interaction.user.mention}\n'
+                        f'You have opened from {case_name}:\n'
+                        f'```ansi\n'
+                        f'{color}{loot.wear}{stattrak_color} {stattrak_str()}{color}{loot.name}\n'
+                        f'```',
+                        embed=img)
+        else:
+            await interaction.response.send_message(
+                'Error: Unable to process request'
+            )
         
     @case.autocomplete('case_name')
     async def case_autocomplete(
