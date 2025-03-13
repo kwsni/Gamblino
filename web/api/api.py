@@ -1,11 +1,15 @@
-from ninja import NinjaAPI, Schema
-from ninja.security import APIKeyHeader
-from user.models import Player, PlayerItem, Item
-from django.contrib.auth.hashers import make_password
-from gamblino.util import secret_keygen
 from os import getenv
+from django.shortcuts import get_object_or_404
 from dotenv import load_dotenv
 from decimal import Decimal
+
+from ninja import NinjaAPI, Schema, ModelSchema
+from ninja.security import APIKeyHeader
+
+from allauth.socialaccount.models import SocialAccount
+
+from inventory.models import Inventory, InvItem, ItemWear, Item, Case
+from .schemas import LootSchema, PatchCasePriceSchema, PatchItemPriceSchema
 
 load_dotenv()
 
@@ -17,62 +21,52 @@ class BotAuth(APIKeyHeader):
         if key == getenv('CLIENT_SECRET'):
             return True
 
-api_v1 = NinjaAPI(version='1.0', auth=BotAuth())
+api_v1 = NinjaAPI(version='1.0')
 
-class LootSchema(Schema):
-    uid: int
-    username: str
-    item: str
-    wear: str
-    rarity: str
-
-
-@api_v1.post('/auth')
-def auth(request):
-    assert isinstance(request.auth, Player)
-    return f'Hello, {request.auth}'
-
-@api_v1.post('/open-case')
+@api_v1.post('/open-case', auth=BotAuth())
 def case(request, loot: LootSchema):
-    # request contains discord data payload in JSON
-    # create playeritem with given data
-    # return status
-    p, p_created = Player.objects.get_or_create(
-        pk=loot.uid,
+    inv, inv_created = Inventory.objects.get_or_create(
+        uid=loot.uid,
         defaults={
-            'id': loot.uid,
-            'username': loot.username,
-            'password': make_password(secret_keygen()),
+            'uid': loot.uid,
             'cash': Decimal(0)
         }
     )
+    if inv.user == None:
+        try:
+            user = SocialAccount.objects.get(uid=inv.uid)
+            inv.user = user
+            user.save()
+        except SocialAccount.DoesNotExist:
+            pass
     item = Item.objects.get(name=loot.item, wear=loot.wear)
     if isinstance(item, Item):
         if isinstance(
-            PlayerItem.objects.create(
-                player=p,
+            InvItem.objects.create(
+                inv=inv,
                 item=item
-            ), PlayerItem
+            ), InvItem
         ):
-            return api_v1.create_response(
-                request,
-                {
-                    'msg': f'Added new user {loot.username} and updated their inventory'
-                } if p_created
-                else {
-                    'msg': f'Updated {loot.username}\'s inventory'
-                },
-                status=201
-            )
+            return 201, {'msg': f'Created new inventory for {loot.username}'} if inv_created else 200, {
+                    'msg': f'Updated {loot.username}\'s inventory'}
         else:
-            return api_v1.create_response(
-                request,
-                {'msg': 'Server error: Unable to add to player inventory'},
-                status=500
-            )
+            return 500, {'msg': 'Server error: Unable to update player inventory'}
     else:
-        return api_v1.create_response(
-            request,
-            {'msg': 'Item does not exist'},
-            status=404
-        )
+        return 404, {'msg': 'Item does not exist'}
+
+@api_v1.patch('/case/{name}/price')
+def update_case_price(request, name: str, payload: PatchCasePriceSchema):
+    case = get_object_or_404(Case, name=name)
+    for attr, value in payload.dict().items():
+        setattr(case, attr, value)
+    case.save()
+    return 200
+
+@api_v1.patch('/item/{name}/{wear}/price')
+def update_item_price(request, name: str, wear: str, payload: PatchItemPriceSchema):
+    item = get_object_or_404(Item, name=name)
+    itemwear = get_object_or_404(ItemWear, item=item, wear=wear)
+    for attr, value in payload.dict().items():
+        setattr(itemwear, attr, value)
+    itemwear.save()
+    return 200

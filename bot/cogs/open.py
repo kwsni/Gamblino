@@ -48,7 +48,7 @@ class Open(commands.Cog):
         
         async with aiohttp.ClientSession(base_url='http://192.168.0.154:8000/') as session:
             headers = {'X-API-Key': getenv('CLIENT_SECRET')}
-            async with session.post('/api/open-case', json=loot_json, headers=headers) as response:
+            async with session.post('/api/v1/open-case', json=loot_json, headers=headers) as response:
                 api_r = await response.json()
                 
         if api_r.code == 200:

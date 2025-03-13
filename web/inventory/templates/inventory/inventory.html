@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="bg-gray-800 p-2 rounded-lg">
-    <h1 class="font-bold p-1">{{ user.username }}'s inventory</h1>
-    {% if inventory %}
+    <h1 class="font-bold p-1">{{ user.extra_data.global_name }}'s inventory</h1>
+    {% if page_obj %}
         <ul>
-        {% for i in inventory %}
+        {% for i in page_obj %}
             <li class="bg-gray-700 p-1 m-1 rounded-lg">{{ i.item.wear }} {{ i.item.name }}: ${{ i.item.price }}</li>
         {%endfor%}
         </ul>

@@ -1,13 +1,13 @@
 {% extends 'base.html'%}
 {% block content %}
-{% if user_list %}
+{% if page_obj %}
     <h1 class="font-bold p-1">Users</h1>
     <ul class="bg-gray-800 p-1 rounded-lg">
-    {% for user in user_list %}
+    {% for user in page_obj %}
         <li class="bg-gray-700 p-1 m-1 rounded-lg">
             <a class="text-emerald-500 hover:text-emerald-700"
-                href="{% url 'user:profile' user.id %}">
-                {{ user.username }}
+                href="{% url 'inventory:profile' user.uid %}">
+                {{ user.extra_data.global_name }}
             </a>
         </li>
     {% endfor %}

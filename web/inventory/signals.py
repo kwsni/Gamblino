@@ -1,0 +1,1 @@
+# Implement cash compensation for item deletion (pre-delete)
