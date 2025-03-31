@@ -24,13 +24,11 @@ class Open(commands.Cog):
         loot = await Loot().rollCase(case_name)
         img = discord.Embed()
         img.set_image(url=loot.img)
-        stattrak_str = lambda : 'StatTrak™ ' if loot.stattrak else ''
+        stattrak_str = 'StatTrak™ ' if loot.stattrak else ''
         color = ''
         stattrak_color = '\u001b[0;33m'
         match(loot.rarity):
             # Use ansi formatting to use color text in Discord
-            case 'Rare':
-                color = '\u001b[0;31m]'
             case 'Covert':
                 color = '\u001b[0;31m'
             case 'Classified':
@@ -58,7 +56,7 @@ class Open(commands.Cog):
                         f'{interaction.user.mention}\n'
                         f'You have opened from {case_name}:\n'
                         f'```ansi\n'
-                        f'{color}{loot.wear}{stattrak_color} {stattrak_str()}{color}{loot.name}\n'
+                        f'{color}{loot.wear} {stattrak_color}{stattrak_str}{color}{loot.name}\n'
                         f'```',
                         embed=img)
         else:

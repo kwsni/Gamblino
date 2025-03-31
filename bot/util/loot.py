@@ -71,5 +71,5 @@ class Loot:
         return self
 
     def __str__(self) -> str:
-        stattrak_str = lambda : 'StatTrak™ ' if self.stattrak else ''
-        return f'{self.wear}{stattrak_str()}{self.name}'
+        stattrak_str = 'StatTrak™ ' if self.stattrak else ''
+        return f'{stattrak_str}{self.name}'

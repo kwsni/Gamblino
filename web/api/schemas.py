@@ -1,6 +1,6 @@
 from ninja import Schema, ModelSchema
 
-from inventory.models import ItemWear, Item, Case
+from inventory.models import ItemPrice, Item, Case
 
 class PatchCasePriceSchema(ModelSchema):
     class Meta:
@@ -9,7 +9,7 @@ class PatchCasePriceSchema(ModelSchema):
 
 class PatchItemPriceSchema(ModelSchema):
     class Meta:
-        model = ItemWear
+        model = ItemPrice
         fields = ['price']
 
 class LootSchema(Schema):
@@ -17,4 +17,5 @@ class LootSchema(Schema):
     username: str
     item: str
     wear: str
+    stattrak: str
     rarity: str

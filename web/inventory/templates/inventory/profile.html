@@ -1,11 +1,13 @@
-{% extends 'base.html'%}
+{% extends 'allauth/layouts/manage.html' %}
 {% block content %}
 <div class="bg-gray-800 p-2 rounded-lg">
-    <h1>{{ user.extra_data.global_name }}</h1>
+
+    <h1>{% if socialuser.extra_data.global_name %}{{ socialuser.extra_data.global_name }}{% else %}{{ user_profile.username }}{% endif %}</h1>
     <div class="m-3">
         <p>Cash: ${{ inv.cash }}</p>
+        {% url "inventory:inventory" socialuser.uid as inv_url_ %}
         <a class="text-emerald-500 hover:text-emerald-700"
-            href="{% url 'inventory:inventory' user.uid %}">
+            href="{% if inv_url_ %}{{ inv_url_ }}{% else %}# {% endif %}">
             Inventory
         </a>
     </div>

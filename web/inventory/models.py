@@ -6,18 +6,19 @@ from django.utils.translation import gettext_lazy as _
 
 from allauth.socialaccount.models import SocialAccount
  
+def img_dir_path(instance, filename):
+        return f'{instance._meta.model_name}/{instance.name}.png'
 
 class Case(models.Model):
     price = models.DecimalField(max_digits=9, decimal_places=2, default=Decimal(100))
-    name = models.CharField(max_length=200, default='')
-    image = models.URLField(default='')
+    name = models.CharField(max_length=200, unique=True, default='')
+    image = models.ImageField(upload_to=img_dir_path)
 
     def __str__(self):
         return f'{self.name}: ${self.price}'
     
 class Item(models.Model):
     class Rarity(models.TextChoices):
-        RARE = 'Rare', _('Rare')
         COVERT = 'Covert', _('Covert')
         CLASSIFIED = 'Classified', _('Classified')
         RESTRICTED = 'Restricted', _('Restricted')
@@ -25,15 +26,16 @@ class Item(models.Model):
 
         __empty__ = _('Null')
 
-    name = models.CharField(max_length=128, default='')
+
+    name = models.CharField(max_length=128, unique=True, default='')
     rarity = models.CharField(max_length=16, choices=Rarity, default=Rarity.__empty__)
-    image = models.URLField(default='')
+    image = models.ImageField(upload_to=img_dir_path)
     case = models.ForeignKey(Case, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f'{self.name} ({self.rarity})'
     
-class ItemWear(models.Model):
+class ItemPrice(models.Model):
     class Wear(models.TextChoices):
         FACTORY_NEW = 'Factory New', _('Factory New')
         MINIMAL_WEAR = 'Minimal Wear', _('Minimal Wear')
@@ -46,10 +48,11 @@ class ItemWear(models.Model):
     # Composite pk item and wear?
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     wear = models.CharField(max_length=16, choices=Wear, default=Wear.__empty__)
+    stattrak = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=9, decimal_places=2, default=Decimal(0))
 
     def __str__(self):
-        return f'{self.wear} {self.item.name}: ${self.price}'
+        return f'{self.wear} {"StatTrak™ " if self.stattrak else ""}{self.item.name}: ${self.price}'
 
     
 class Inventory(models.Model):
@@ -61,10 +64,10 @@ class Inventory(models.Model):
         return f'{self.uid}: ${self.cash}'
     
 class InvItem(models.Model):
-    item = models.ForeignKey(ItemWear, on_delete=models.CASCADE)
+    item = models.ForeignKey(ItemPrice, on_delete=models.CASCADE)
     inv = models.ForeignKey(Inventory, on_delete=models.CASCADE)
     opened_on = models.DateTimeField("date opened", default=timezone.now)
 
     def __str__(self):
-        return f'{self.inv.uid}\'s {self.item.wear} {self.item.item.name}: ${self.item.price}'
+        return f'{self.inv.uid}\'s {self.item.wear} {"StatTrak™ " if self.item.stattrak else ""}{self.item.item.name}: ${self.item.price}'
 

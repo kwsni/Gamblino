@@ -3,12 +3,12 @@ from django.shortcuts import get_object_or_404
 from dotenv import load_dotenv
 from decimal import Decimal
 
-from ninja import NinjaAPI, Schema, ModelSchema
+from ninja import NinjaAPI
 from ninja.security import APIKeyHeader
 
 from allauth.socialaccount.models import SocialAccount
 
-from inventory.models import Inventory, InvItem, ItemWear, Item, Case
+from inventory.models import Inventory, InvItem, ItemPrice, Item, Case
 from .schemas import LootSchema, PatchCasePriceSchema, PatchItemPriceSchema
 
 load_dotenv()
@@ -39,12 +39,12 @@ def case(request, loot: LootSchema):
             user.save()
         except SocialAccount.DoesNotExist:
             pass
-    item = Item.objects.get(name=loot.item, wear=loot.wear)
-    if isinstance(item, Item):
+    item = ItemPrice.objects.get(item__name=loot.item, wear=loot.wear, stattrak=loot.stattrak)
+    if isinstance(item, ItemPrice):
         if isinstance(
             InvItem.objects.create(
                 inv=inv,
-                item=item
+                item=item.item
             ), InvItem
         ):
             return 201, {'msg': f'Created new inventory for {loot.username}'} if inv_created else 200, {
@@ -65,8 +65,17 @@ def update_case_price(request, name: str, payload: PatchCasePriceSchema):
 @api_v1.patch('/item/{name}/{wear}/price')
 def update_item_price(request, name: str, wear: str, payload: PatchItemPriceSchema):
     item = get_object_or_404(Item, name=name)
-    itemwear = get_object_or_404(ItemWear, item=item, wear=wear)
+    itemprice = get_object_or_404(ItemPrice, item=item, wear=wear, stattrak=False)
     for attr, value in payload.dict().items():
-        setattr(itemwear, attr, value)
-    itemwear.save()
+        setattr(itemprice, attr, value)
+    itemprice.save()
+    return 200
+
+@api_v1.patch('/item/{name}/{wear}/stattrak/price')
+def update_stattrak_item_price(request, name: str, wear: str, payload: PatchItemPriceSchema):
+    item = get_object_or_404(Item, name=name)
+    itemprice = get_object_or_404(ItemPrice, item=item, wear=wear, stattrak=True)
+    for attr, value in payload.dict().items():
+        setattr(itemprice, attr, value)
+    itemprice.save()
     return 200

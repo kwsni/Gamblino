@@ -1,0 +1,21 @@
+{% extends "allauth/layouts/base.html" %}
+{% load allauth %}
+{% load i18n %}
+{% block body %}
+    {% if messages %}
+    <div>
+        <strong>{% trans "Messages:" %}</strong>
+        <ul>
+            {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    <div class="flex flex-col grow-1 justify-center items-center">
+        <div class="flex flex-row grow-0 shrink-0 justify-center items-center">
+            <div class="bg-gray-900 rounded-xl p-5">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>  
+{% endblock %}

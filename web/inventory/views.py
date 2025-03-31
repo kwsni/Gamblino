@@ -1,10 +1,13 @@
+from decimal import Decimal
 from typing import Any
 from webbrowser import get
 
+from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
 from django.views.generic import ListView
+from django.contrib.auth.models import User
 
 from allauth.socialaccount.models import SocialAccount
 
@@ -17,17 +20,40 @@ def index_view(request):
     return TemplateResponse(request, 'inventory/users.html', context)
 
 def profile_view(request, uid: int):
+    socialuser = get_object_or_404(SocialAccount, uid=uid)
+    inv, inv_created = Inventory.objects.get_or_create(
+        uid=uid,
+        defaults={
+            'uid': uid,
+            'cash': Decimal(0),
+            'user': socialuser
+        }
+    )
     context = {
-        'user': get_object_or_404(SocialAccount, uid=uid),
-        'inv': get_object_or_404(Inventory, uid=uid)
+        'socialuser': socialuser,
+        'user_profile': get_object_or_404(User, id=socialuser.user.id),
+        'inv': inv
     }
     return TemplateResponse(request, 'inventory/profile.html', context)
 
+def profile_redirect_view(request):
+    socialuser = get_object_or_404(SocialAccount, user=request.user)
+    return HttpResponseRedirect(f'/user/{socialuser.uid}', status=301)
+
 def inventory_view(request, uid: int):
-    user = get_object_or_404(SocialAccount, uid=uid)
-    inv = get_object_or_404(Inventory, uid=uid)
-    inv_items = InvItem.objects.filter(user=user)
-    context = {'user': user,
+    socialuser = get_object_or_404(SocialAccount, uid=uid)
+    user = get_object_or_404(User, id=socialuser.user.id)
+    inv, inv_created = Inventory.objects.get_or_create(
+        uid=uid,
+        defaults={
+            'uid': uid,
+            'cash': Decimal(0),
+            'user': user
+        }
+    )
+    inv_items = InvItem.objects.filter(inv=inv)
+    context = {'socialuser': socialuser,
+               'user_profile': user,
                'inv': inv} | paged_list_context(request, inv_items, 10)
     return TemplateResponse(request, 'inventory/inventory.html', context)
 

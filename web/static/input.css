@@ -1,1 +1,8 @@
-@import "tailwindcss"
+@import "tailwindcss";
+
+@font-face {
+    font-family: Ginto-Discord;
+    font-style:  normal;
+    font-weight: 400;
+    src: url('fonts/ABCGintoDiscord-Regular.woff2') format('woff2');
+}

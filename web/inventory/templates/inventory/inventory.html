@@ -1,13 +1,16 @@
-{% extends 'base.html' %}
+{% extends 'allauth/layouts/manage.html' %}
 {% block content %}
 <div class="bg-gray-800 p-2 rounded-lg">
-    <h1 class="font-bold p-1">{{ user.extra_data.global_name }}'s inventory</h1>
+    <h1 class="font-bold p-1">{% if socialuser.extra_data.global_name %}{{ socialuser.extra_data.global_name }}{% else %}{{ user_profile.username }}{% endif %}'s inventory</h1>
     {% if page_obj %}
-        <ul>
-        {% for i in page_obj %}
-            <li class="bg-gray-700 p-1 m-1 rounded-lg">{{ i.item.wear }} {{ i.item.name }}: ${{ i.item.price }}</li>
-        {%endfor%}
-        </ul>
+        <div class="grid grid-cols-5 gap-1 bg-gray-900 p-1 rounded-lg">
+            {% for i in page_obj %}
+                <div class="bg-gray-700 p-2 m-1 rounded-lg">
+                    <img src={{ i.item.item.image.url }} class="max-w-0.1"/>
+                    <span class="">{{ i.item.wear }} {% if i.item.stattrak %}StatTrak™ {% endif %}{{ i.item.item.name }}: ${{ i.item.price }}</span>
+                </div>
+            {%endfor%}
+        </div>
     {% else %}
         <p>Empty inventory</p>
     {% endif %}

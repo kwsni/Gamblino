@@ -515,6 +515,15 @@
   .collapse {
     visibility: collapse;
   }
+  .invisible {
+    visibility: hidden;
+  }
+  .visible {
+    visibility: visible;
+  }
+  .absolute {
+    position: absolute;
+  }
   .fixed {
     position: fixed;
   }
@@ -523,6 +532,9 @@
   }
   .static {
     position: static;
+  }
+  .right-1 {
+    right: calc(var(--spacing) * 1);
   }
   .container {
     width: 100%;
@@ -557,6 +569,12 @@
   .flex {
     display: flex;
   }
+  .grid {
+    display: grid;
+  }
+  .hidden {
+    display: none;
+  }
   .inline-flex {
     display: inline-flex;
   }
@@ -566,8 +584,32 @@
   .table {
     display: table;
   }
+  .h-6 {
+    height: calc(var(--spacing) * 6);
+  }
+  .min-h-dvh {
+    min-height: 100dvh;
+  }
+  .w-6 {
+    width: calc(var(--spacing) * 6);
+  }
   .w-full {
     width: 100%;
+  }
+  .flex-shrink {
+    flex-shrink: 1;
+  }
+  .shrink-0 {
+    flex-shrink: 0;
+  }
+  .flex-grow {
+    flex-grow: 1;
+  }
+  .grow-0 {
+    flex-grow: 0;
+  }
+  .grow-1 {
+    flex-grow: 1;
   }
   .border-collapse {
     border-collapse: collapse;
@@ -578,15 +620,65 @@
   .resize {
     resize: both;
   }
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .flex-row {
+    flex-direction: row;
+  }
+  .content-center {
+    align-content: center;
+  }
+  .items-center {
+    align-items: center;
+  }
   .justify-between {
     justify-content: space-between;
+  }
+  .justify-center {
+    justify-content: center;
+  }
+  .justify-items-center {
+    justify-items: center;
+  }
+  .gap-1 {
+    gap: calc(var(--spacing) * 1);
+  }
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
+  }
+  .gap-8 {
+    gap: calc(var(--spacing) * 8);
+  }
+  .self-center {
+    align-self: center;
   }
   .rounded-lg {
     border-radius: var(--radius-lg);
   }
+  .rounded-xl {
+    border-radius: var(--radius-xl);
+  }
+  .rounded-t-lg {
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
+  }
+  .rounded-b-lg {
+    border-bottom-right-radius: var(--radius-lg);
+    border-bottom-left-radius: var(--radius-lg);
+  }
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
+  }
+  .bg-\[\#5865F2\] {
+    background-color: #5865F2;
   }
   .bg-gray-700 {
     background-color: var(--color-gray-700);
@@ -609,14 +701,34 @@
   .p-3 {
     padding: calc(var(--spacing) * 3);
   }
+  .p-5 {
+    padding: calc(var(--spacing) * 5);
+  }
+  .text-center {
+    text-align: center;
+  }
   .text-left {
     text-align: left;
   }
   .text-right {
     text-align: right;
   }
+  .font-\[Ginto-Discord\] {
+    font-family: Ginto-Discord;
+  }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
   .font-sans {
     font-family: var(--font-sans);
+  }
+  .text-4xl {
+    font-size: var(--text-4xl);
+    line-height: var(--tw-leading, var(--text-4xl--line-height));
+  }
+  .text-6xl {
+    font-size: var(--text-6xl);
+    line-height: var(--tw-leading, var(--text-6xl--line-height));
   }
   .font-black {
     --tw-font-weight: var(--font-weight-black);
@@ -625,6 +737,15 @@
   .font-bold {
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
+  }
+  .text-nowrap {
+    text-wrap: nowrap;
+  }
+  .text-wrap {
+    text-wrap: wrap;
+  }
+  .text-\[\#E0E3FF\] {
+    color: #E0E3FF;
   }
   .text-emerald-500 {
     color: var(--color-emerald-500);
@@ -642,6 +763,34 @@
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
+  .group-hover\/item\:text-emerald-600 {
+    &:is(:where(.group\/item):hover *) {
+      @media (hover: hover) {
+        color: var(--color-emerald-600);
+      }
+    }
+  }
+  .group-hover\/menu\:visible {
+    &:is(:where(.group\/menu):hover *) {
+      @media (hover: hover) {
+        visibility: visible;
+      }
+    }
+  }
+  .hover\:bg-gray-600 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-600);
+      }
+    }
+  }
+  .hover\:text-emerald-600 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-emerald-600);
+      }
+    }
+  }
   .hover\:text-emerald-700 {
     &:hover {
       @media (hover: hover) {
@@ -649,6 +798,12 @@
       }
     }
   }
+}
+@font-face {
+  font-family: Ginto-Discord;
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/ABCGintoDiscord-Regular.woff2') format('woff2');
 }
 @keyframes spin {
   to {
