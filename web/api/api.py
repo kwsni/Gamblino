@@ -1,14 +1,13 @@
+from decimal import Decimal
 from os import getenv
+
+from allauth.socialaccount.models import SocialAccount
 from django.shortcuts import get_object_or_404
 from dotenv import load_dotenv
-from decimal import Decimal
-
+from inventory.models import Case, Inventory, InvItem, Item, ItemPrice
 from ninja import NinjaAPI
 from ninja.security import APIKeyHeader
 
-from allauth.socialaccount.models import SocialAccount
-
-from inventory.models import Inventory, InvItem, ItemPrice, Item, Case
 from .schemas import LootSchema, PatchCasePriceSchema, PatchItemPriceSchema
 
 load_dotenv()
@@ -32,7 +31,7 @@ def case(request, loot: LootSchema):
             'cash': Decimal(0)
         }
     )
-    if inv.user == None:
+    if inv.user is None:
         try:
             user = SocialAccount.objects.get(uid=inv.uid)
             inv.user = user

@@ -1,7 +1,11 @@
-from django.db import migrations
-from django.core.files.images import ImageFile
+import io
+import re
+import time
+
+import requests
 from django.core.exceptions import ObjectDoesNotExist
-import requests, re, io, time
+from django.core.files.images import ImageFile
+from django.db import migrations
 
 
 def sync_item_schema(apps, schema_editor):

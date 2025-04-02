@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import index_view, profile_view, inventory_view, profile_redirect_view
+from .views import index_view, inventory_view, profile_redirect_view, profile_view
 
 app_name = 'inventory'
 urlpatterns = [

@@ -1,9 +1,10 @@
-import requests, requests, re
+import re
 
-from django.core.management.base import BaseCommand, CommandError
+import requests
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.core.management.base import BaseCommand
 from inventory.models import Case, Item
+
 
 class Command(BaseCommand):
     help = 'Updates item and case prices'

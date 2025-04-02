@@ -1,13 +1,11 @@
+from allauth.account.views import logout
+from allauth.socialaccount.providers.discord.views import oauth2_callback, oauth2_login
+from api.api import api_v1
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
-from django.conf import settings
-from django.conf.urls.static import static
-
-from allauth.account.views import login, logout, signup
-from allauth.socialaccount.providers.discord.views import oauth2_login, oauth2_callback
-
-from api.api import api_v1
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name="index.html"), name='index'),

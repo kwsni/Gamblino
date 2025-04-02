@@ -1,8 +1,7 @@
 import requests
-
-from django.core.management.base import BaseCommand, CommandError
-
+from django.core.management.base import BaseCommand
 from inventory.models import Case, Item, ItemPrice
+
 
 class Command(BaseCommand):
     help = 'Updates the database to the latest item schema'

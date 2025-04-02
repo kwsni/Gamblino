@@ -1,0 +1,40 @@
+{% if page_obj.has_other_pages %}
+<div class="sticky self-center bottom-0 flex flex-row justify-between p-2">
+    {% if page_obj.has_previous %}
+    {% querystring page=page_obj.previous_page_number as prev_page %}
+    <a class="block bg-gray-800 rounded-lg p-2 text-emerald-500 hover:text-emerald-700"
+        href="{{ page_url }}{{ prev_page }}">
+        &lt;
+    </a>
+    {% else %}
+    <a inert class="block bg-gray-900 rounded-lg p-2 text-gray-700"
+        href="#">
+        &lt;
+    </a>
+    {% endif %}
+    <div class="flex flex-row gap-2">
+    {% for p in elided_page_range %}
+    {% if p == "..." %}
+        ...
+    {% else %}
+        <a class="block bg-gray-800 rounded-lg p-2 text-emerald-500 hover:text-emerald-700"
+            href="{{ page_url }}{% querystring page=p %}">
+            {{ p }}
+        </a>
+    {% endif %}
+    {% endfor %}
+    </div>
+    {% if page_obj.has_next %}
+    {% querystring page=page_obj.next_page_number as next_page %}
+    <a class="block bg-gray-800 rounded-lg p-2 text-emerald-500 hover:text-emerald-700"
+        href="{{ page_url }}{{ next_page }}">
+        &gt;
+    </a>
+    {% else %}
+    <a inert class="block bg-gray-900 rounded-lg p-2 text-gray-700"
+        href="#">
+        &gt;
+    </a>
+    {% endif %}
+</div>
+{% endif %}

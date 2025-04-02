@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load static %}
+{% load socialaccount %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,50 +17,32 @@
     </head>
     <body class="min-h-dvh bg-gray-950 flex flex-col font-sans text-white">
         <header>
-            <nav class="bg-gray-900 flex flex-row w-full justify-between items-center">
-                <a href={% url "index" %} class="p-3 text-left text-4xl font-mono">Gamblino</a>
-                <div class="group/menu relative p-3">
-                    {% if user.is_authenticated %}
-                        {%comment%}
-                        {% url 'account_login' as login_url_ %}
-                        {% if login_url_ %}
-                            <li class="bg-gray-700 p-1 rounded-t-lg group/item hover:bg-gray-600">
-                                <a href="{{ login_url_ }}"
-                                    class="text-nowrap group-hover/item:text-emerald-600">{% trans "Sign In" %}</a>
-                            </li>
-                        {% endif %}
-                        {% url 'account_signup' as signup_url_ %}
-                        {% if signup_url_ %}
-                            <li class="bg-gray-700 p-1 rounded-b-lg group/item hover:bg-gray-600">
-                                <a href="{{ signup_url_ }}"
-                                    class="text-nowrap group-hover/item:text-emerald-600">{% trans "Sign Up" %}</a>
-                            </li>
-                        {% endif %}
-                        {%endcomment%}
-                            <a href="#" class="text-left hover:text-emerald-600">{% trans "Menu" %}</a>
-                            <ul class="invisible absolute right-1 bg-gray-800 rounded-lg group-hover/menu:visible">
-                                <li class="bg-gray-700 p-1 rounded-t-lg group/item hover:bg-gray-600">
-                                    <a href="/user/profile"
-                                    class="text-nowrap group-hover/item:text-emerald-600">
-                                        {% comment %} adjust user info accordingly {% endcomment %}
-                                        {% block user_info %} 
-                                            {% if user.first_name %}
-                                                {{ user.first_name }}
-                                            {% else %}
-                                                {{ user.username }}
-                                            {% endif %}
-                                        {% endblock user_info %}
-                                    </a>
-                                </li>
-                                <li class="bg-gray-700 p-1 rounded-b-lg group/item hover:bg-gray-600">
-                                    <a href="/accounts/logout"
-                                       class="text-nowrap group-hover/item:text-emerald-600">
-                                       Log Out
-                                    </a>
-                                </li>
-                                {% endif %}
-                            </ul>
-                </div>
+            <nav class="flex flex-row w-full justify-between items-center p-3 gap-3 bg-gray-900 border-b-1 border-gray-700">
+                <a href={% url "index" %} class="text-left text-2xl font-mono lg:text-4xl">Gamblino</a>
+                {% if user.is_authenticated %}    
+                    <div class="inline-block relative bg-gray-800 rounded-lg group/menu hover:rounded-b-none focus-within:rounded-b-none">
+                        {% get_social_accounts user as accounts %}
+                        <button class="flex flex-row items-center px-2 py-1 gap-2 rounded-lg outline-1 outline-gray-700 cursor-pointer active:bg-gray-950 focus:bg-gray-900 focus:rounded-b-none focus:border-b-0 group-hover/menu:rounded-b-none group-hover/menu:border-b-0">
+                            <img src="https://cdn.discordapp.com/avatars/{{ accounts.discord.0.uid }}/{{accounts.discord.0.extra_data.avatar}}" 
+                                    class="rounded-full h-10"/>
+                            {{ accounts.discord.0.extra_data.global_name }}
+                        </button>
+                        <div id="menu" class="invisible absolute right-0 w-full z-3 outline-1 divide-y-1 outline-gray-700 divide-gray-700 rounded-b-lg group-focus-within/menu:visible group-hover/menu:visible">
+                            <a href={% url "inventory:profile_redirect" %}
+                                class="block bg-gray-800 text-nowrap p-2 hover:bg-gray-700 hover:text-emerald-600 active:bg-gray-800">
+                                Profile
+                            </a>
+                            <a href="#"
+                                class="block bg-gray-800 text-nowrap p-2 hover:bg-gray-700 hover:text-emerald-600 active:bg-gray-900 focus:bg-gray-800">
+                                Manage account
+                            </a>
+                            <a href={% url "account_logout" %}
+                                class="block bg-gray-800 rounded-b-lg text-nowrap p-2 hover:bg-gray-700 hover:text-emerald-600">
+                                Log out
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
             </nav>
         </header>
         {% block body %}

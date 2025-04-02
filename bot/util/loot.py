@@ -1,9 +1,10 @@
 import logging
-from typing_extensions import Self
-from random import randint, choice
-from aiohttp_client_cache.session import CachedSession
-from aiohttp_client_cache import SQLiteBackend
+from random import choice, randint
 from urllib.parse import urljoin
+
+from aiohttp_client_cache import SQLiteBackend
+from aiohttp_client_cache.session import CachedSession
+from typing_extensions import Self
 
 log = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ class Loot:
     
     async def rollCase(self, container_name: str) -> Self:
         cases = await self.get('Case')
-        if(container_name is not ''):
+        if(container_name != ''):
             for c in cases:
                 if c['name'] == container_name:
                     self.container = c

@@ -5,11 +5,15 @@ Counter-Strike 2 crate opening simulator as a Discord Bot
 
 """
 
-import asyncio, logging, logging.handlers, discord
+import asyncio
+import logging
+import logging.handlers
 from os import getenv
-from dotenv import load_dotenv
-from discord.ext import commands
+
+import discord
 from cogs.open import Open
+from discord.ext import commands
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -44,7 +48,7 @@ class GamblinoBot(commands.Bot):
 	async def on_ready(self) -> None:
 		try:
 			sync = await super().tree.sync()
-			log.info(f"Successfully synced {len(sync)} commands")
+			log.info(f'Successfully synced {len(sync)} commands')
 		except Exception as e:
 			log.error(e)
 

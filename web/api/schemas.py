@@ -1,6 +1,6 @@
-from ninja import Schema, ModelSchema
+from inventory.models import Case, ItemPrice
+from ninja import ModelSchema, Schema
 
-from inventory.models import ItemPrice, Item, Case
 
 class PatchCasePriceSchema(ModelSchema):
     class Meta:

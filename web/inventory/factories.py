@@ -1,11 +1,12 @@
+from datetime import datetime
+
 import factory.declarations as factory
 import factory.faker as faker
+from allauth.socialaccount.models import SocialAccount
 from factory.django import DjangoModelFactory
 
-from allauth.socialaccount.models import SocialAccount
 from .models import Inventory, InvItem, ItemPrice
 
-from datetime import datetime
 
 class InventoryFactory(DjangoModelFactory):
     class Meta:
