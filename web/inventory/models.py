@@ -22,7 +22,7 @@ class Item(models.Model):
         COVERT = 'Covert', _('Covert')
         CLASSIFIED = 'Classified', _('Classified')
         RESTRICTED = 'Restricted', _('Restricted')
-        MIL_SPEC_GRADE = 'Mil-Spec', _('Mil-Spec')
+        MIL_SPEC_GRADE = 'Mil-Spec Grade', _('Mil-Spec Grade')
 
         __empty__ = _('Null')
 
@@ -33,7 +33,7 @@ class Item(models.Model):
     case = models.ForeignKey(Case, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f'{self.name} ({self.rarity})'
+        return f'{self.rarity} {self.name}'
     
 class ItemPrice(models.Model):
     class Wear(models.TextChoices):
@@ -52,7 +52,7 @@ class ItemPrice(models.Model):
     price = models.DecimalField(max_digits=9, decimal_places=2, default=Decimal(0))
 
     def __str__(self):
-        return f'{self.wear} {"StatTrak™ " if self.stattrak else ""}{self.item.name}: ${self.price}'
+        return f' {"StatTrak™ " if self.stattrak else ""}{self.wear} {self.item.name}: ${self.price}'
 
     
 class Inventory(models.Model):
@@ -70,7 +70,7 @@ class Inventory(models.Model):
         return InvItem.objects.filter(inv=self.pk).order_by("-item__price")[:6]
 
     def __str__(self):
-        return f'{self.uid}: ${self.cash}'
+        return f'{self.uid}\'s cash: ${self.cash}'
     
 class InvItem(models.Model):
     item = models.ForeignKey(ItemPrice, on_delete=models.CASCADE)
@@ -78,5 +78,5 @@ class InvItem(models.Model):
     opened_on = models.DateTimeField('date opened', default=timezone.now)
 
     def __str__(self):
-        return f'{self.inv.uid}\'s {self.item.wear} {"StatTrak™ " if self.item.stattrak else ""}{self.item.item.name}: ${self.item.price}'
+        return f'{self.inv.uid}\'s {self.item}'
 

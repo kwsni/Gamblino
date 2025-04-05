@@ -4,8 +4,7 @@
 {% block body %}
     {% if messages %}
     <div>
-        <strong>{% trans "Messages:" %}</strong>
-        <ul>
+        <ul class="flex flex-row m-3 p-3 rounded-lg bg-gray-700 outline-1 outline-gray-600">
             {% for message in messages %}<li>{{ message }}</li>{% endfor %}
         </ul>
     </div>

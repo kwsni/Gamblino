@@ -15,7 +15,7 @@
 
         <link rel="stylesheet" href="{% static 'style.css' %}">
     </head>
-    <body class="min-h-dvh bg-gray-950 flex flex-col font-sans text-white">
+    <body class="h-full min-h-dvh has-[div#no-scroll]:max-h-dvh bg-gray-950 flex flex-col font-sans text-white">
         <header>
             <nav class="flex flex-row w-full justify-between items-center p-3 gap-3 bg-gray-900 border-b-1 border-gray-700">
                 <a href={% url "index" %} class="text-left text-2xl font-mono lg:text-4xl">Gamblino</a>
@@ -27,17 +27,18 @@
                                     class="rounded-full h-10"/>
                             {{ accounts.discord.0.extra_data.global_name }}
                         </button>
+                        {% url "inventory:inventory" accounts.discord.0.uid as inv_url_ %}
                         <div id="menu" class="invisible absolute right-0 w-full z-3 outline-1 divide-y-1 outline-gray-700 divide-gray-700 rounded-b-lg group-focus-within/menu:visible group-hover/menu:visible">
                             <a href={% url "inventory:profile_redirect" %}
-                                class="block bg-gray-800 text-nowrap p-2 hover:bg-gray-700 hover:text-emerald-600 active:bg-gray-800">
+                                class="block bg-gray-800 text-nowrap p-2 hover:bg-gray-700 hover:text-emerald-600 active:bg-gray-900">
                                 Profile
                             </a>
-                            <a href="#"
-                                class="block bg-gray-800 text-nowrap p-2 hover:bg-gray-700 hover:text-emerald-600 active:bg-gray-900 focus:bg-gray-800">
-                                Manage account
+                            <a href="{% if inv_url_ %}{{ inv_url_ }}{% else %}# {% endif %}"
+                                class="block bg-gray-800 text-nowrap p-2 hover:bg-gray-700 hover:text-emerald-600 active:bg-gray-900">
+                                Inventory
                             </a>
                             <a href={% url "account_logout" %}
-                                class="block bg-gray-800 rounded-b-lg text-nowrap p-2 hover:bg-gray-700 hover:text-emerald-600">
+                                class="block bg-gray-800 rounded-b-lg text-nowrap p-2 hover:bg-gray-700 hover:text-emerald-600 active:bg-gray-900">
                                 Log out
                             </a>
                         </div>
