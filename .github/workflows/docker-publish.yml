@@ -27,10 +27,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: Dockerfile.bot
-            image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_bot
-          - dockerfile: Dockerfile.web
-            image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_web
+          - dockerfile: docker/Dockerfile.bot
+            image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bot
+          - dockerfile: docker/Dockerfile.web
+            image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-web
     
     permissions:
       contents: read
