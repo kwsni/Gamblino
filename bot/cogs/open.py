@@ -8,7 +8,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from util.loot import Loot
 
-load_dotenv()
+load_dotenv(override=True)
 
 log = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ class Open(commands.Cog):
                      'stattrak': loot.stattrak,
                      'rarity': loot.rarity}
         
-        async with aiohttp.ClientSession(base_url=f'https://{getenv('ALLOWED_HOSTS').split(',')[0]}/') as session:
+        async with aiohttp.ClientSession(base_url=f'https://{getenv("API_URL")}/') as session:
             headers = {'X-API-Key': getenv('CLIENT_SECRET')}
             async with session.post('/api/v1/open-case', json=loot_json, headers=headers) as response:
                 api_success = response.ok

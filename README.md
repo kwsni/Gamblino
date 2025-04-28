@@ -26,6 +26,7 @@ services:
       - APP_ID=             # from Discord application
       - PUBLIC_KEY=         # from Discord application
       - CLIENT_SECRET=      # from Discord application
+      - API_URL=
   gamblino-web:
     image: ghcr.io/gamblino-web
     container_name: gamblino-web-1
