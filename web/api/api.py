@@ -38,12 +38,12 @@ def case(request, loot: LootSchema):
             user.save()
         except SocialAccount.DoesNotExist:
             pass
-    item = ItemPrice.objects.get(item__name=loot.item, wear=loot.wear, stattrak=loot.stattrak)
+    item = ItemPrice.objects.get(item__name=loot.item, wear=loot.wear, stattrak=bool(loot.stattrak))
     if isinstance(item, ItemPrice):
         if isinstance(
             InvItem.objects.create(
                 inv=inv,
-                item=item.item
+                item=item
             ), InvItem
         ):
             return 201, {'msg': f'Created new inventory for {loot.username}'} if inv_created else 200, {

@@ -44,14 +44,20 @@ class Open(commands.Cog):
                      'username': interaction.user.name,
                      'item': loot.name,
                      'wear': loot.wear,
+                     'stattrak': loot.stattrak,
                      'rarity': loot.rarity}
         
-        async with aiohttp.ClientSession(base_url='http://192.168.0.154:8000/') as session:
+        async with aiohttp.ClientSession(base_url=f'https://{getenv('ALLOWED_HOSTS').split(',')[0]}/') as session:
             headers = {'X-API-Key': getenv('CLIENT_SECRET')}
             async with session.post('/api/v1/open-case', json=loot_json, headers=headers) as response:
-                api_r = await response.json()
-                
-        if api_r.code == 200:
+                api_success = response.ok
+                log.info(api_success)
+                api_r = await response.text()
+        
+        log.info(api_success)
+        log.info(api_r)
+        
+        if api_success:
             log.info(f'{interaction.user.name} (id: {interaction.user.id}) has opened {loot} from {case_name}')
             
             await interaction.response.send_message(

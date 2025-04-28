@@ -1,9 +1,10 @@
 {% extends 'allauth/layouts/manage.html' %}
+{% block head_title %}{{ socialuser.extra_data.global_name }}'s profile | Gamblino{% endblock %}
 {% block content %}
 <div class="flex flex-col p-3 gap-3 self-center w-full max-w-[1080px]">
     <div class="flex flex-row justify-between bg-gray-900 rounded-lg p-3 gap-3">
         <div class="flex flex-row gap-3">
-            <img src="https://cdn.discordapp.com/avatars/{{ socialuser.uid }}/{{socialuser.extra_data.avatar}}" 
+            <img src={% if socialuser.extra_data.avatar is not None %}"https://cdn.discordapp.com/avatars/{{ socialuser.uid }}/{{socialuser.extra_data.avatar}}"{% else %}"https://cdn.discordapp.com/embed/avatars/1.png"{% endif %} 
                 class="h-0 min-h-full object-cover rounded-full"/>
             <div class="self-center text-nowrap">
                 <h1 class="text-xl lg:text-4xl">
@@ -28,7 +29,7 @@
         <div class="flex flex-row gap-3 overflow-x-scroll">
             {% for i in inv.recently_opened %}
             <div class="flex flex-col shrink-0 bg-gray-800 rounded-lg w-32 lg:w-64 p-3 gap-3 text-center text-pretty text-xs lg:text-base">
-                <img class="object-contain" src={{ i.item.item.image.url }}/>
+                <img class="object-contain" src="{{ i.item.item.image.url }}"/>
                 {% if i.item.item.rarity == "Mil-Spec Grade" %}
                 <span class="text-[#4e6af6]">{% if i.item.stattrak %}<span class="text-[#cf6a32]"> StatTrak™ </span>{% endif %}{{ i.item.item.name }} ({{ i.item.wear }})</span>
                 {% elif i.item.item.rarity == "Restricted" %}
@@ -47,7 +48,7 @@
         <div class="flex flex-row gap-3 overflow-x-scroll">
             {% for i in inv.most_expensive %}
             <div class="flex flex-col shrink-0 bg-gray-800 rounded-lg w-32 lg:w-64 p-3 gap-3 text-center text-pretty text-xs lg:text-base">
-                <img class="object-contain" src={{ i.item.item.image.url }}/>
+                <img class="object-contain" src="{{ i.item.item.image.url }}"/>
                 {% if i.item.item.rarity == "Mil-Spec Grade" %}
                 <span class="text-[#4e6af6]">{% if i.item.stattrak %}<span class="text-[#cf6a32]"> StatTrak™ </span>{% endif %}{{ i.item.item.name }} ({{ i.item.wear }})</span>
                 {% elif i.item.item.rarity == "Restricted" %}

@@ -11,8 +11,8 @@
     {% endif %}
     <div class="flex flex-row gap-2">
     {% for p in elided_page_range %}
-    {% if p == "..." %}
-        <a inert class="block p-2 text-gray-700">...<a>
+    {% if p == page_obj.paginator.ELLIPSIS %}
+        <a inert class="block p-2 text-gray-700">...</a>
     {% elif page_obj.number == p %}
         <a class="block p-2 text-gray-700">{{ p }}</a>
     {% else %}

@@ -5,7 +5,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0 noindex">
         <title>
             {% block head_title %}
             {% endblock head_title %}
@@ -23,7 +23,7 @@
                     <div class="inline-block relative bg-gray-800 rounded-lg group/menu hover:rounded-b-none focus-within:rounded-b-none">
                         {% get_social_accounts user as accounts %}
                         <button class="flex flex-row items-center px-2 py-1 gap-2 rounded-lg outline-1 outline-gray-700 cursor-pointer active:bg-gray-950 focus:bg-gray-900 focus:rounded-b-none focus:border-b-0 group-hover/menu:rounded-b-none group-hover/menu:border-b-0">
-                            <img src="https://cdn.discordapp.com/avatars/{{ accounts.discord.0.uid }}/{{accounts.discord.0.extra_data.avatar}}" 
+                            <img src={% if socialuser.extra_data.avatar is not None %}"https://cdn.discordapp.com/avatars/{{ socialuser.uid }}/{{socialuser.extra_data.avatar}}"{% else %}"https://cdn.discordapp.com/embed/avatars/1.png"{% endif %} 
                                     class="rounded-full h-10"/>
                             {{ accounts.discord.0.extra_data.global_name }}
                         </button>
