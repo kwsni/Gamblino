@@ -49,6 +49,8 @@ services:
       - EMAIL_HOST_PASSWORD=
       - EMAIL_USE_TLS=
       - STORAGE_HOST=
+      - STORAGE_MEDIA_ROOT=
+      - STORAGE_MEDIA_KEY_PATH=
 ```
 Then run the following command:
 ```
