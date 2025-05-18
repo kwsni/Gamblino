@@ -122,7 +122,6 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
-STATIC_ROOT = '/static/'
 
 # Media Files
 # https://docs.djangoproject.com/en/5.1/topics/files/
@@ -136,13 +135,22 @@ STORAGES = {
         'OPTIONS': {
             'host': getenv('STORAGE_HOST'),
             'root_path': getenv('STORAGE_MEDIA_ROOT'),
+            'base_url': 'media/',
             'params': {
-                'key_filename': getenv('STORAGE_MEDIA_KEY_PATH'),
+                'key_filename': getenv('STORAGE_SSH_KEY_PATH'),
             },
         },
     },
     'staticfiles': {
-        'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+        'BACKEND': 'storages.backends.sftpstorage.SFTPStorage',
+        'OPTIONS': {
+            'host': getenv('STORAGE_HOST'),
+            'root_path': getenv('STORAGE_STATIC_ROOT'),
+            'base_url': 'static/',
+            'params': {
+                'key_filename': getenv('STORAGE_SSH_KEY_PATH'),
+            },
+        },
     },
 }
 
