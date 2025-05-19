@@ -18,8 +18,10 @@ Use the provided docker compose file below, ensuring that all environment variab
 
 services:
   gamblino-bot:
-    image: ghcr.io/gamblino-bot
-    container_name: gamblino-bot-1
+    build:
+      context: .
+      dockerfile: Dockerfile.bot
+    container_name: gamblino-bot
     restart: unless-stopped
     environment:
       - DISCORD_TOKEN=      # from Discord application
@@ -28,8 +30,10 @@ services:
       - CLIENT_SECRET=      # from Discord application
       - API_URL=
   gamblino-web:
-    image: ghcr.io/gamblino-web
-    container_name: gamblino-web-1
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: gamblino-web
     restart: unless-stopped
     environment:
       - DISCORD_TOKEN=      # from Discord application
