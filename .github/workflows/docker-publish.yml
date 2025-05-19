@@ -27,9 +27,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: docker/Dockerfile.bot
+          - dockerfile: Dockerfile.bot
             image: ghcr.io/gamblino-bot
-          - dockerfile: docker/Dockerfile.web
+          - dockerfile: Dockerfile.web
             image: ghcr.io/gamblino-web
     
     permissions:
