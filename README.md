@@ -51,7 +51,8 @@ services:
       - EMAIL_USE_TLS=
       - STORAGE_HOST=
       - STORAGE_MEDIA_ROOT=
-      - STORAGE_MEDIA_KEY_PATH=
+      - STORAGE_STATIC_ROOT=
+      - STORAGE_SSH_KEY_PATH=
 ```
 Then run the following command:
 ```

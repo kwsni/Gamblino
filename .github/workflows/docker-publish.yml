@@ -14,6 +14,8 @@ on:
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
 
 
 jobs:
@@ -26,9 +28,9 @@ jobs:
       matrix:
         include:
           - dockerfile: docker/Dockerfile.bot
-            image: ghcr.io/${{ github.repository }}-bot
+            image: ghcr.io/gamblino-bot
           - dockerfile: docker/Dockerfile.web
-            image: ghcr.io/${{ github.repository }}-web
+            image: ghcr.io/gamblino-web
     
     permissions:
       contents: read
