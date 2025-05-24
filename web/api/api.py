@@ -17,7 +17,7 @@ class BotAuth(APIKeyHeader):
     param_name = 'X-API-Key'
 
     def authenticate(self, request, key):
-        if key == getenv('CLIENT_SECRET'):
+        if key == getenv('DISCORD_CLIENT_SECRET'):
             return True
 
 api_v1 = NinjaAPI(version='1.0')

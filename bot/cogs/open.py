@@ -46,8 +46,8 @@ class Open(commands.Cog):
                      'wear': loot.wear,
                      'rarity': loot.rarity}
         
-        async with aiohttp.ClientSession(base_url='http://192.168.0.154:8000/') as session:
-            headers = {'X-API-Key': getenv('CLIENT_SECRET')}
+        async with aiohttp.ClientSession(base_url=f'{getenv("DJANGO_API_URL")}') as session:
+            headers = {'X-API-Key': getenv('DISCORD_CLIENT_SECRET')}
             async with session.post('/api/v1/open-case', json=loot_json, headers=headers) as response:
                 api_r = await response.json()
                 
