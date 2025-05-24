@@ -8,7 +8,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from util.loot import Loot
 
-load_dotenv()
+load_dotenv(override=True)
 
 log = logging.getLogger(__name__)
 
@@ -44,14 +44,20 @@ class Open(commands.Cog):
                      'username': interaction.user.name,
                      'item': loot.name,
                      'wear': loot.wear,
+                     'stattrak': loot.stattrak,
                      'rarity': loot.rarity}
         
         async with aiohttp.ClientSession(base_url=f'{getenv("DJANGO_API_URL")}') as session:
             headers = {'X-API-Key': getenv('DISCORD_CLIENT_SECRET')}
             async with session.post('/api/v1/open-case', json=loot_json, headers=headers) as response:
-                api_r = await response.json()
-                
-        if api_r.code == 200:
+                api_success = response.ok
+                log.info(api_success)
+                api_r = await response.text()
+        
+        log.info(api_success)
+        log.info(api_r)
+        
+        if api_success:
             log.info(f'{interaction.user.name} (id: {interaction.user.id}) has opened {loot} from {case_name}')
             
             await interaction.response.send_message(

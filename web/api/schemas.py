@@ -17,5 +17,5 @@ class LootSchema(Schema):
     username: str
     item: str
     wear: str
-    stattrak: str
+    stattrak: bool
     rarity: str

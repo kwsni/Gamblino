@@ -15,7 +15,7 @@ from cogs.open import Open
 from discord.ext import commands
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 root_log = logging.getLogger()
 root_log.setLevel(logging.INFO)

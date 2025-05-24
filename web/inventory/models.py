@@ -79,4 +79,3 @@ class InvItem(models.Model):
 
     def __str__(self):
         return f'{self.inv.uid}\'s {self.item}'
-

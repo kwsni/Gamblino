@@ -10,8 +10,8 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('', TemplateView.as_view(template_name="index.html"), name='index'),
     path('user/', include('inventory.urls')),
-    path('admin/doc/', include('django.contrib.admindocs.urls')),
-    path('admin/', admin.site.urls),
+    path('pit-boss/doc/', include('django.contrib.admindocs.urls')),
+    path('pit-boss/', admin.site.urls),
     path('accounts/discord/login/', oauth2_login, name='discord_login'),
     path('accounts/discord/login/callback/', oauth2_callback, name='discord_callback'),
     path('accounts/logout/', logout, name='account_logout'),

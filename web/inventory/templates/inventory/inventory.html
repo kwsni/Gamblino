@@ -1,8 +1,9 @@
 {% extends 'allauth/layouts/manage.html' %}
+{% block head_title %}{{ socialuser.extra_data.global_name }}'s inventory | Gamblino{% endblock %}
 {% block content %}
 <div id="no-scroll" class="flex flex-col self-center items-center max-w-[1080px] max-h-full overflow-y-hidden p-3">
     <div class="sticky top-0 flex flex-row items-center w-full bg-gray-900 rounded-x-lg rounded-t-lg p-3 gap-3">
-        <img src="https://cdn.discordapp.com/avatars/{{ socialuser.uid }}/{{socialuser.extra_data.avatar}}" 
+        <img src={% if socialuser.extra_data.avatar is not None %}"https://cdn.discordapp.com/avatars/{{ socialuser.uid }}/{{socialuser.extra_data.avatar}}"{% else %}"https://cdn.discordapp.com/embed/avatars/1.png"{% endif %} 
         class="rounded-full h-16"/>
         <div class="flex-col">
             <h1 class="font-bold">{% if socialuser.extra_data.global_name %}{{ socialuser.extra_data.global_name }}{% else %}{{ user_profile.username }}{% endif %}'s inventory</h1>
@@ -15,7 +16,7 @@
         <div class="grid grid-cols-2 md:grid-cols-5 gap-3 rounded-lg">
         {% for i in page_obj %}
             <div class="bg-gray-800 rounded-lg p-3 gap-3 text-center text-pretty text-sm lg:text-base">
-                <img src={{ i.item.item.image.url }}/>
+                <img src="{{ i.item.item.image.url }}"/>
                 {% if i.item.item.rarity == "Mil-Spec Grade" %}
                 <span class="text-[#4e6af6]">{% if i.item.stattrak %}<span class="text-[#cf6a32]"> StatTrak™ </span>{% endif %}{{ i.item.item.name }} ({{ i.item.wear }})</span>
                 {% elif i.item.item.rarity == "Restricted" %}
@@ -27,7 +28,7 @@
                 {% endif %}
             </div>
         {% endfor %}
-            <div class="sticky bottom-0 col-span-full bg-gray-900 w-full max-w-[1080p] p-3">
+            <div class="sticky bottom-0 col-span-full bg-gray-900 w-full max-w-[1080p] py-2">
                 {% include 'inventory/layouts/page_nav.html'%}
             </div>
         </div>

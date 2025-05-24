@@ -62,6 +62,6 @@ def paged_list_context(request, objects, paginate_by: int):
     paginator = Paginator(objects, paginate_by)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
-    elided_page_range = paginator.get_elided_page_range(page_number, on_each_side=2, on_ends=1)
+    elided_page_range = paginator.get_elided_page_range(page_number, on_each_side=1, on_ends=1)
     return {'page_obj': page_obj, 'elided_page_range': elided_page_range}
         

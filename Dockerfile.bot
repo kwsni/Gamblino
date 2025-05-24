@@ -1,14 +1,16 @@
-FROM python:3.10
+FROM python:3.10.12
 
 LABEL org.opencontainers.image.source=https://github.com/kwsni/Gamblino
+LABEL org.opencontainers.image.title="gamblino-bot"
 LABEL org.opencontainers.image.description="CS:GO/CS2 crate opening simulator as a Discord Bot"
+LABEL org.opencontainers.image.version=0.2.0
 LABEL org.opencontainers.image.licenses=MIT
 
 WORKDIR /usr/src/gamblino-bot/
 
-COPY ./bot/. ./bot/
+COPY bot/. .
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD [ "python", "gamblino/bot.py"]
+CMD [ "python", "bot.py"]
